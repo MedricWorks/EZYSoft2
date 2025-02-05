@@ -1,0 +1,321 @@
+{
+  "Files": [
+    {
+      "Id": "C:\\Users\\Medri\\source\\repos\\EZYSoft2\\EZYSoft2\\obj\\Debug\\net8.0\\scopedcss\\projectbundle\\EZYSoft2.bundle.scp.css",
+      "PackagePath": "staticwebassets\\EZYSoft2.bundle.scp.css"
+    },
+    {
+      "Id": "C:\\Users\\Medri\\source\\repos\\EZYSoft2\\EZYSoft2\\wwwroot\\css\\site.css",
+      "PackagePath": "staticwebassets\\css\\site.css"
+    },
+    {
+      "Id": "C:\\Users\\Medri\\source\\repos\\EZYSoft2\\EZYSoft2\\wwwroot\\favicon.ico",
+      "PackagePath": "staticwebassets\\favicon.ico"
+    },
+    {
+      "Id": "C:\\Users\\Medri\\source\\repos\\EZYSoft2\\EZYSoft2\\wwwroot\\js\\site.js",
+      "PackagePath": "staticwebassets\\js\\site.js"
+    },
+    {
+      "Id": "C:\\Users\\Medri\\source\\repos\\EZYSoft2\\EZYSoft2\\wwwroot\\lib\\bootstrap\\LICENSE",
+      "PackagePath": "staticwebassets\\lib\\bootstrap"
+    },
+    {
+      "Id": "C:\\Users\\Medri\\source\\repos\\EZYSoft2\\EZYSoft2\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-grid.css"
+    },
+    {
+      "Id": "C:\\Users\\Medri\\source\\repos\\EZYSoft2\\EZYSoft2\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-grid.css.map"
+    },
+    {
+      "Id": "C:\\Users\\Medri\\source\\repos\\EZYSoft2\\EZYSoft2\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.min.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-grid.min.css"
+    },
+    {
+      "Id": "C:\\Users\\Medri\\source\\repos\\EZYSoft2\\EZYSoft2\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.min.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-grid.min.css.map"
+    },
+    {
+      "Id": "C:\\Users\\Medri\\source\\repos\\EZYSoft2\\EZYSoft2\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.rtl.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-grid.rtl.css"
+    },
+    {
+      "Id": "C:\\Users\\Medri\\source\\repos\\EZYSoft2\\EZYSoft2\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.rtl.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-grid.rtl.css.map"
+    },
+    {
+      "Id": "C:\\Users\\Medri\\source\\repos\\EZYSoft2\\EZYSoft2\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.rtl.min.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-grid.rtl.min.css"
+    },
+    {
+      "Id": "C:\\Users\\Medri\\source\\repos\\EZYSoft2\\EZYSoft2\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.rtl.min.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-grid.rtl.min.css.map"
+    },
+    {
+      "Id": "C:\\Users\\Medri\\source\\repos\\EZYSoft2\\EZYSoft2\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.css"
+    },
+    {
+      "Id": "C:\\Users\\Medri\\source\\repos\\EZYSoft2\\EZYSoft2\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.css.map"
+    },
+    {
+      "Id": "C:\\Users\\Medri\\source\\repos\\EZYSoft2\\EZYSoft2\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.min.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.min.css"
+    },
+    {
+      "Id": "C:\\Users\\Medri\\source\\repos\\EZYSoft2\\EZYSoft2\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.min.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.min.css.map"
+    },
+    {
+      "Id": "C:\\Users\\Medri\\source\\repos\\EZYSoft2\\EZYSoft2\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.rtl.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.rtl.css"
+    },
+    {
+      "Id": "C:\\Users\\Medri\\source\\repos\\EZYSoft2\\EZYSoft2\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.rtl.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.rtl.css.map"
+    },
+    {
+      "Id": "C:\\Users\\Medri\\source\\repos\\EZYSoft2\\EZYSoft2\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.rtl.min.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.rtl.min.css"
+    },
+    {
+      "Id": "C:\\Users\\Medri\\source\\repos\\EZYSoft2\\EZYSoft2\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.rtl.min.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.rtl.min.css.map"
+    },
+    {
+      "Id": "C:\\Users\\Medri\\source\\repos\\EZYSoft2\\EZYSoft2\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.css"
+    },
+    {
+      "Id": "C:\\Users\\Medri\\source\\repos\\EZYSoft2\\EZYSoft2\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.css.map"
+    },
+    {
+      "Id": "C:\\Users\\Medri\\source\\repos\\EZYSoft2\\EZYSoft2\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.min.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.min.css"
+    },
+    {
+      "Id": "C:\\Users\\Medri\\source\\repos\\EZYSoft2\\EZYSoft2\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.min.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.min.css.map"
+    },
+    {
+      "Id": "C:\\Users\\Medri\\source\\repos\\EZYSoft2\\EZYSoft2\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.rtl.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.rtl.css"
+    },
+    {
+      "Id": "C:\\Users\\Medri\\source\\repos\\EZYSoft2\\EZYSoft2\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.rtl.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.rtl.css.map"
+    },
+    {
+      "Id": "C:\\Users\\Medri\\source\\repos\\EZYSoft2\\EZYSoft2\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.rtl.min.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.rtl.min.css"
+    },
+    {
+      "Id": "C:\\Users\\Medri\\source\\repos\\EZYSoft2\\EZYSoft2\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.rtl.min.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.rtl.min.css.map"
+    },
+    {
+      "Id": "C:\\Users\\Medri\\source\\repos\\EZYSoft2\\EZYSoft2\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap.css"
+    },
+    {
+      "Id": "C:\\Users\\Medri\\source\\repos\\EZYSoft2\\EZYSoft2\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap.css.map"
+    },
+    {
+      "Id": "C:\\Users\\Medri\\source\\repos\\EZYSoft2\\EZYSoft2\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.min.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap.min.css"
+    },
+    {
+      "Id": "C:\\Users\\Medri\\source\\repos\\EZYSoft2\\EZYSoft2\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.min.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap.min.css.map"
+    },
+    {
+      "Id": "C:\\Users\\Medri\\source\\repos\\EZYSoft2\\EZYSoft2\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.rtl.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap.rtl.css"
+    },
+    {
+      "Id": "C:\\Users\\Medri\\source\\repos\\EZYSoft2\\EZYSoft2\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.rtl.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap.rtl.css.map"
+    },
+    {
+      "Id": "C:\\Users\\Medri\\source\\repos\\EZYSoft2\\EZYSoft2\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.rtl.min.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap.rtl.min.css"
+    },
+    {
+      "Id": "C:\\Users\\Medri\\source\\repos\\EZYSoft2\\EZYSoft2\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.rtl.min.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap.rtl.min.css.map"
+    },
+    {
+      "Id": "C:\\Users\\Medri\\source\\repos\\EZYSoft2\\EZYSoft2\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.bundle.js",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.bundle.js"
+    },
+    {
+      "Id": "C:\\Users\\Medri\\source\\repos\\EZYSoft2\\EZYSoft2\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.bundle.js.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.bundle.js.map"
+    },
+    {
+      "Id": "C:\\Users\\Medri\\source\\repos\\EZYSoft2\\EZYSoft2\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.bundle.min.js",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.bundle.min.js"
+    },
+    {
+      "Id": "C:\\Users\\Medri\\source\\repos\\EZYSoft2\\EZYSoft2\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.bundle.min.js.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.bundle.min.js.map"
+    },
+    {
+      "Id": "C:\\Users\\Medri\\source\\repos\\EZYSoft2\\EZYSoft2\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.esm.js",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.esm.js"
+    },
+    {
+      "Id": "C:\\Users\\Medri\\source\\repos\\EZYSoft2\\EZYSoft2\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.esm.js.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.esm.js.map"
+    },
+    {
+      "Id": "C:\\Users\\Medri\\source\\repos\\EZYSoft2\\EZYSoft2\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.esm.min.js",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.esm.min.js"
+    },
+    {
+      "Id": "C:\\Users\\Medri\\source\\repos\\EZYSoft2\\EZYSoft2\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.esm.min.js.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.esm.min.js.map"
+    },
+    {
+      "Id": "C:\\Users\\Medri\\source\\repos\\EZYSoft2\\EZYSoft2\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.js",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.js"
+    },
+    {
+      "Id": "C:\\Users\\Medri\\source\\repos\\EZYSoft2\\EZYSoft2\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.js.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.js.map"
+    },
+    {
+      "Id": "C:\\Users\\Medri\\source\\repos\\EZYSoft2\\EZYSoft2\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.min.js",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.min.js"
+    },
+    {
+      "Id": "C:\\Users\\Medri\\source\\repos\\EZYSoft2\\EZYSoft2\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.min.js.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.min.js.map"
+    },
+    {
+      "Id": "C:\\Users\\Medri\\source\\repos\\EZYSoft2\\EZYSoft2\\wwwroot\\lib\\jquery-validation-unobtrusive\\LICENSE.txt",
+      "PackagePath": "staticwebassets\\lib\\jquery-validation-unobtrusive\\LICENSE.txt"
+    },
+    {
+      "Id": "C:\\Users\\Medri\\source\\repos\\EZYSoft2\\EZYSoft2\\wwwroot\\lib\\jquery-validation-unobtrusive\\jquery.validate.unobtrusive.js",
+      "PackagePath": "staticwebassets\\lib\\jquery-validation-unobtrusive\\jquery.validate.unobtrusive.js"
+    },
+    {
+      "Id": "C:\\Users\\Medri\\source\\repos\\EZYSoft2\\EZYSoft2\\wwwroot\\lib\\jquery-validation-unobtrusive\\jquery.validate.unobtrusive.min.js",
+      "PackagePath": "staticwebassets\\lib\\jquery-validation-unobtrusive\\jquery.validate.unobtrusive.min.js"
+    },
+    {
+      "Id": "C:\\Users\\Medri\\source\\repos\\EZYSoft2\\EZYSoft2\\wwwroot\\lib\\jquery-validation\\LICENSE.md",
+      "PackagePath": "staticwebassets\\lib\\jquery-validation\\LICENSE.md"
+    },
+    {
+      "Id": "C:\\Users\\Medri\\source\\repos\\EZYSoft2\\EZYSoft2\\wwwroot\\lib\\jquery-validation\\dist\\additional-methods.js",
+      "PackagePath": "staticwebassets\\lib\\jquery-validation\\dist\\additional-methods.js"
+    },
+    {
+      "Id": "C:\\Users\\Medri\\source\\repos\\EZYSoft2\\EZYSoft2\\wwwroot\\lib\\jquery-validation\\dist\\additional-methods.min.js",
+      "PackagePath": "staticwebassets\\lib\\jquery-validation\\dist\\additional-methods.min.js"
+    },
+    {
+      "Id": "C:\\Users\\Medri\\source\\repos\\EZYSoft2\\EZYSoft2\\wwwroot\\lib\\jquery-validation\\dist\\jquery.validate.js",
+      "PackagePath": "staticwebassets\\lib\\jquery-validation\\dist\\jquery.validate.js"
+    },
+    {
+      "Id": "C:\\Users\\Medri\\source\\repos\\EZYSoft2\\EZYSoft2\\wwwroot\\lib\\jquery-validation\\dist\\jquery.validate.min.js",
+      "PackagePath": "staticwebassets\\lib\\jquery-validation\\dist\\jquery.validate.min.js"
+    },
+    {
+      "Id": "C:\\Users\\Medri\\source\\repos\\EZYSoft2\\EZYSoft2\\wwwroot\\lib\\jquery\\LICENSE.txt",
+      "PackagePath": "staticwebassets\\lib\\jquery\\LICENSE.txt"
+    },
+    {
+      "Id": "C:\\Users\\Medri\\source\\repos\\EZYSoft2\\EZYSoft2\\wwwroot\\lib\\jquery\\dist\\jquery.js",
+      "PackagePath": "staticwebassets\\lib\\jquery\\dist\\jquery.js"
+    },
+    {
+      "Id": "C:\\Users\\Medri\\source\\repos\\EZYSoft2\\EZYSoft2\\wwwroot\\lib\\jquery\\dist\\jquery.min.js",
+      "PackagePath": "staticwebassets\\lib\\jquery\\dist\\jquery.min.js"
+    },
+    {
+      "Id": "C:\\Users\\Medri\\source\\repos\\EZYSoft2\\EZYSoft2\\wwwroot\\lib\\jquery\\dist\\jquery.min.map",
+      "PackagePath": "staticwebassets\\lib\\jquery\\dist\\jquery.min.map"
+    },
+    {
+      "Id": "C:\\Users\\Medri\\source\\repos\\EZYSoft2\\EZYSoft2\\wwwroot\\uploads\\058e9e7e-a3c3-49a2-9812-e388a547f2ea.pdf",
+      "PackagePath": "staticwebassets\\uploads\\058e9e7e-a3c3-49a2-9812-e388a547f2ea.pdf"
+    },
+    {
+      "Id": "C:\\Users\\Medri\\source\\repos\\EZYSoft2\\EZYSoft2\\wwwroot\\uploads\\168a9c96-de46-4ecf-b5a3-0cd531947d32.pdf",
+      "PackagePath": "staticwebassets\\uploads\\168a9c96-de46-4ecf-b5a3-0cd531947d32.pdf"
+    },
+    {
+      "Id": "C:\\Users\\Medri\\source\\repos\\EZYSoft2\\EZYSoft2\\wwwroot\\uploads\\276160f2-1e28-4d5a-a1c9-5620c8d94ef4.pdf",
+      "PackagePath": "staticwebassets\\uploads\\276160f2-1e28-4d5a-a1c9-5620c8d94ef4.pdf"
+    },
+    {
+      "Id": "C:\\Users\\Medri\\source\\repos\\EZYSoft2\\EZYSoft2\\wwwroot\\uploads\\2801ad0c-bc9b-4294-920c-5e38ffbfb0c0.pdf",
+      "PackagePath": "staticwebassets\\uploads\\2801ad0c-bc9b-4294-920c-5e38ffbfb0c0.pdf"
+    },
+    {
+      "Id": "C:\\Users\\Medri\\source\\repos\\EZYSoft2\\EZYSoft2\\wwwroot\\uploads\\301e999a-9ab8-4bd7-8882-0db135f6d24e.pdf",
+      "PackagePath": "staticwebassets\\uploads\\301e999a-9ab8-4bd7-8882-0db135f6d24e.pdf"
+    },
+    {
+      "Id": "C:\\Users\\Medri\\source\\repos\\EZYSoft2\\EZYSoft2\\wwwroot\\uploads\\3c9ef2e5-aeaf-4083-9af0-fcb814acd57c.pdf",
+      "PackagePath": "staticwebassets\\uploads\\3c9ef2e5-aeaf-4083-9af0-fcb814acd57c.pdf"
+    },
+    {
+      "Id": "C:\\Users\\Medri\\source\\repos\\EZYSoft2\\EZYSoft2\\wwwroot\\uploads\\41ffcbe8-d278-47c7-a40c-0f6df2c3a126.pdf",
+      "PackagePath": "staticwebassets\\uploads\\41ffcbe8-d278-47c7-a40c-0f6df2c3a126.pdf"
+    },
+    {
+      "Id": "C:\\Users\\Medri\\source\\repos\\EZYSoft2\\EZYSoft2\\wwwroot\\uploads\\7bce0d1b-8200-4446-9bd5-ced18a28f58d.pdf",
+      "PackagePath": "staticwebassets\\uploads\\7bce0d1b-8200-4446-9bd5-ced18a28f58d.pdf"
+    },
+    {
+      "Id": "C:\\Users\\Medri\\source\\repos\\EZYSoft2\\EZYSoft2\\wwwroot\\uploads\\7ed3a149-2bcd-4cde-a119-c1606e61989b.pdf",
+      "PackagePath": "staticwebassets\\uploads\\7ed3a149-2bcd-4cde-a119-c1606e61989b.pdf"
+    },
+    {
+      "Id": "C:\\Users\\Medri\\source\\repos\\EZYSoft2\\EZYSoft2\\wwwroot\\uploads\\853618fc-063a-4f48-af7d-83d979ae9850.pdf",
+      "PackagePath": "staticwebassets\\uploads\\853618fc-063a-4f48-af7d-83d979ae9850.pdf"
+    },
+    {
+      "Id": "C:\\Users\\Medri\\source\\repos\\EZYSoft2\\EZYSoft2\\wwwroot\\uploads\\962e8528-3d32-4cb6-8f6a-428e33d0cb52.pdf",
+      "PackagePath": "staticwebassets\\uploads\\962e8528-3d32-4cb6-8f6a-428e33d0cb52.pdf"
+    },
+    {
+      "Id": "C:\\Users\\Medri\\source\\repos\\EZYSoft2\\EZYSoft2\\wwwroot\\uploads\\c0c5a77b-e3aa-4c96-94ed-b24a6ddd5b3b.pdf",
+      "PackagePath": "staticwebassets\\uploads\\c0c5a77b-e3aa-4c96-94ed-b24a6ddd5b3b.pdf"
+    },
+    {
+      "Id": "C:\\Users\\Medri\\source\\repos\\EZYSoft2\\EZYSoft2\\wwwroot\\uploads\\c18eb9ed-9ef0-4a79-8686-6b236b89a9e4.pdf",
+      "PackagePath": "staticwebassets\\uploads\\c18eb9ed-9ef0-4a79-8686-6b236b89a9e4.pdf"
+    },
+    {
+      "Id": "C:\\Users\\Medri\\source\\repos\\EZYSoft2\\EZYSoft2\\wwwroot\\uploads\\d4b44a80-a98b-438f-87b8-cee85cc21edc.pdf",
+      "PackagePath": "staticwebassets\\uploads\\d4b44a80-a98b-438f-87b8-cee85cc21edc.pdf"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.EZYSoft2.Microsoft.AspNetCore.StaticWebAssets.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.build.EZYSoft2.props",
+      "PackagePath": "build\\EZYSoft2.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.buildMultiTargeting.EZYSoft2.props",
+      "PackagePath": "buildMultiTargeting\\EZYSoft2.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.buildTransitive.EZYSoft2.props",
+      "PackagePath": "buildTransitive\\EZYSoft2.props"
+    }
+  ],
+  "ElementsToRemove": []
+}

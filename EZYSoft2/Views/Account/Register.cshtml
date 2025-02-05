@@ -1,0 +1,94 @@
+﻿@model EZYSoft2.Models.RegisterViewModel
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
+<h2>Register</h2>
+
+<form asp-action="Register" method="post" enctype="multipart/form-data">
+    <input type="hidden" id="g-recaptcha-response" name="RecaptchaToken">
+
+    <div class="form-group">
+        <label asp-for="FirstName"></label>
+        <input asp-for="FirstName" class="form-control" />
+        <span asp-validation-for="FirstName" class="text-danger"></span>    
+    </div>
+
+    <div class="form-group">
+        <label asp-for="LastName"></label>
+        <input asp-for="LastName" class="form-control" />
+        <span asp-validation-for="LastName" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Email"></label>
+        <input asp-for="Email" class="form-control" />
+        <span asp-validation-for="Email" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label for="Password">Password</label>
+        <div class="input-group">
+            <input type="password" id="Password" name="Password" class="form-control" asp-for="Password" required>
+        </div>
+        <small id="passwordRequirementsText" class="form-text text-danger"></small>
+        <div id="passwordStrengthMeter">
+            <div id="strengthBar"></div>
+        </div>
+    </div>
+
+    <style>
+        #passwordStrengthMeter {
+            width: 100%;
+            height: 10px;
+            background-color: #ddd;
+            margin-top: 5px;
+            border-radius: 5px;
+        }
+        #strengthBar {
+            height: 100%;
+            width: 0%;
+            border-radius: 5px;
+        }
+    </style>
+
+    <div class="form-group">
+        <label asp-for="ConfirmPassword"></label>
+        <div class="input-group">
+            <input asp-for="ConfirmPassword" type="password" class="form-control" />
+             <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+        </div>
+    </div>
+
+    <!-- New NRIC Field -->
+    <div class="form-group">
+        <label asp-for="NRIC"></label>
+        <input asp-for="NRIC" class="form-control" />
+        <span asp-validation-for="NRIC" class="text-danger"></span>
+    </div>
+
+    <!-- New Gender Dropdown -->
+    <div class="form-group">
+        <label asp-for="Gender"></label>
+        <select asp-for="Gender" class="form-control">
+            <option value="">Select Gender</option>
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+            <option value="Other">Other</option>
+        </select>
+        <span asp-validation-for="Gender" class="text-danger"></span>
+    </div>
+
+    <!-- New WhoAmI Field -->
+    <div class="form-group">
+        <label asp-for="WhoAmI"></label>
+        <textarea asp-for="WhoAmI" class="form-control"></textarea>
+        <span asp-validation-for="WhoAmI" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Resume"></label>
+        <input asp-for="Resume" type="file" class="form-control" />
+        <span asp-validation-for="Resume" class="text-danger"></span>
+    </div>
+    <button type="submit" class="btn btn-primary">Register</button>
+</form>
+@await Component.InvokeAsync("ReCaptcha")

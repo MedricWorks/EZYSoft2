@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\build\EZYSoft2.props" />
+</Project>

@@ -1,0 +1,21 @@
+﻿@model EZYSoft2.Models.User
+
+@if (Model != null)
+{
+    <h2>Welcome, @Model.FirstName @Model.LastName</h2>
+    <p><strong>Email:</strong> @Model.Email</p>
+    <p><strong>Gender:</strong> @Model.Gender</p>
+    <p><strong>Date of Birth:</strong> @Model.DateOfBirth.ToShortDateString()</p>
+    <p><strong>NRIC:</strong> @Model.NRIC</p> <!-- Decrypted NRIC -->
+    <p><strong>Who Am I:</strong> @Model.WhoAmI</p>
+
+    @if (!string.IsNullOrEmpty(Model.ResumePath))
+    {
+        <p><strong>Resume:</strong> <a href="@Url.Content(Model.ResumePath)" target="_blank">Download Resume</a></p>
+    }
+}
+else
+{
+    <h2>Welcome</h2>
+    <p>Please <a href="@Url.Action("Login", "Account")">log in</a> to see your details.</p>
+}
