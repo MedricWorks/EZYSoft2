@@ -4,7 +4,7 @@
 @if (Model != null)
 {
     <h2>
-        Welcome, @WebUtility.HtmlEncode(Model.FirstName) @WebUtility.HtmlEncode(Model.LastName)
+        Welcome, @WebUtility.HtmlDecode(Model.FirstName) @WebUtility.HtmlDecode(Model.LastName)
     </h2>
     <p><strong>Email:</strong> @WebUtility.HtmlEncode(Model.Email)</p>
     <p><strong>Gender:</strong> @WebUtility.HtmlEncode(Model.Gender)</p>

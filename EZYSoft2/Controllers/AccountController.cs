@@ -16,6 +16,7 @@ using Newtonsoft.Json;
 using Microsoft.AspNetCore.Identity.UI.Services; // ✅ Use correct IEmailSender interface
 using System.Text.Encodings.Web;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Microsoft.AspNetCore.Authorization;
 
 namespace EZYSoft2.Controllers
 {
@@ -28,7 +29,7 @@ namespace EZYSoft2.Controllers
         private readonly ReCaptchaSettings _reCaptchaSettings;
         private readonly IEmailSender _emailSender; // ✅ No need for custom interface
         private readonly UrlEncoder _urlEncoder;
-
+        private readonly SessionHelper _sessionHelper;
 
         public AccountController(
             UserManager<User> userManager,
@@ -38,7 +39,8 @@ namespace EZYSoft2.Controllers
             IOptions<ReCaptchaSettings> reCaptchaSettings,
             IOptions<EmailSettings> emailSettings,
             IEmailSender emailSender,
-            UrlEncoder urlEncoder) // ✅ Inject Email Service
+            UrlEncoder urlEncoder,
+            SessionHelper sessionHelper) // ✅ Inject Email Service
 
         {
             _userManager = userManager;
@@ -48,11 +50,18 @@ namespace EZYSoft2.Controllers
             _reCaptchaSettings = reCaptchaSettings.Value;
             _emailSender = emailSender; // ✅ No need for ILogger<EmailSender>
             _urlEncoder = urlEncoder;
+            _sessionHelper = sessionHelper;
         }
 
         // 🔹 Helper method to log user actions into AuditLog table
         private async Task LogAction(string userId, string action)
         {
+            if (string.IsNullOrEmpty(userId))
+            {
+                _logger.LogWarning("⚠️ Attempted to log an action without a valid user ID.");
+                return;
+            }
+
             var log = new AuditLog
             {
                 UserId = userId,
@@ -63,7 +72,7 @@ namespace EZYSoft2.Controllers
 
             _dbContext.AuditLogs.Add(log);
             await _dbContext.SaveChangesAsync();
-            _logger.LogInformation($"Audit Log: {action} by {userId}");
+            _logger.LogInformation($"📝 Audit Log: {action} by {userId}");
         }
 
         [HttpGet]
@@ -100,7 +109,12 @@ namespace EZYSoft2.Controllers
                     }
                     return View(model);
                 }
-
+                if (model.DateOfBirth >= DateTime.UtcNow.Date)
+                {
+                    ModelState.AddModelError(nameof(model.DateOfBirth), "Date of Birth cannot be today or in the future.");
+                    _logger.LogWarning($"🚨 Registration failed: User {model.Email} entered an invalid Date of Birth ({model.DateOfBirth}).");
+                    return View(model);
+                }
                 // 🔹 Sanitize input before saving
                 model.FirstName = SanitizationHelper.SanitizeInput(model.FirstName);
                 model.LastName = SanitizationHelper.SanitizeInput(model.LastName);
@@ -112,6 +126,12 @@ namespace EZYSoft2.Controllers
                 if (model.DateOfBirth == null)
                 {
                     _logger.LogWarning("Registration failed: Date of Birth is invalid.");
+                    return View(model);
+                }
+                if (!System.Text.RegularExpressions.Regex.IsMatch(model.NRIC, @"^[a-zA-Z0-9]+$"))
+                {
+                    ModelState.AddModelError(nameof(model.NRIC), "NRIC must only contain letters and numbers.");
+                    _logger.LogWarning($"🚨 Registration failed: User {model.Email} entered an invalid NRIC ({model.NRIC}).");
                     return View(model);
                 }
 
@@ -274,51 +294,46 @@ namespace EZYSoft2.Controllers
                 return View(model);
             }
 
-            // ✅ Check if Password Has Expired (Redirect to Change Password)
-            if (user.LastPasswordChange != null && DateTime.UtcNow > user.LastPasswordChange.AddDays(30))
+            // ✅ Verify password before deciding if it's expired
+            var passwordCheck = await _signInManager.CheckPasswordSignInAsync(user, model.Password, lockoutOnFailure: true);
+            if (!passwordCheck.Succeeded)
             {
-                ModelState.AddModelError("", "Your password has expired. Please reset your password.");
+                if (passwordCheck.IsLockedOut)
+                {
+                    ModelState.AddModelError("", "This account is locked. Try again later.");
+                }
+                else
+                {
+                    int failedAttempts = await _userManager.GetAccessFailedCountAsync(user);
+                    ModelState.AddModelError("", $"Invalid email or password. Attempts left: {3 - failedAttempts}");
+
+                    _logger.LogWarning($"Failed login attempt {failedAttempts}/3 for {user.Email}");
+                }
+                return View(model);
+            }
+
+            // ✅ Check if Password Has Expired (AFTER verifying password is correct)
+            bool passwordExpired = user.LastPasswordChange == null || DateTime.UtcNow > user.LastPasswordChange.AddDays(30);
+            if (passwordExpired)
+            {
+                _logger.LogWarning($"🔹 Password expired for user {user.Email}. Redirecting to Change Password.");
+
+                // ✅ Store Expired User Email so ChangePassword knows who they are
+                HttpContext.Session.SetString("PasswordExpired", "true");
+                HttpContext.Session.SetString("ExpiredUserEmail", user.Email);
+
                 return RedirectToAction("ChangePassword");
             }
 
-            // 🔹 Generate a new session token
-            string newSessionToken = Guid.NewGuid().ToString();
-
-            // 🔹 Retrieve the session token from the user's cookies
-            Request.Cookies.TryGetValue("SessionToken", out string existingSessionToken);
-
-            // ✅ Check if another session is already active
-            if (!string.IsNullOrEmpty(user.SessionToken) && user.SessionToken != existingSessionToken)
-            {
-                if (overrideSession != "true") // 🔹 Prompt user if they haven't confirmed override
-                {
-                    ViewBag.ShowSessionOverridePrompt = true;
-                    return View(model);
-                }
-
-                user.SessionToken = null;
-                await _userManager.UpdateAsync(user);
-                await _signInManager.SignOutAsync();
-
-                // ✅ FORCE LOGOUT OLD SESSION BY INVALIDATING ITS COOKIE
-                Response.Cookies.Delete("SessionToken");
-
-                await Task.Delay(500); // ✅ Small delay to ensure session invalidation is applied
-            }
-
-            // ✅ Enforce failed login attempt limit (Max 3 attempts)
+            // ✅ Proceed with normal login
             var result = await _signInManager.PasswordSignInAsync(user, model.Password, model.RememberMe, lockoutOnFailure: true);
-
             if (result.Succeeded)
             {
-                // ✅ Reset failed login attempts on success
                 await _userManager.ResetAccessFailedCountAsync(user);
-
-                // ✅ Set session token only after successful login
+                string newSessionToken = Guid.NewGuid().ToString();
                 user.SessionToken = newSessionToken;
                 await _userManager.UpdateAsync(user);
 
-                // ✅ Store session token in a secure cookie
                 Response.Cookies.Append("SessionToken", newSessionToken, new CookieOptions
                 {
                     HttpOnly = true,
@@ -331,7 +346,8 @@ namespace EZYSoft2.Controllers
                     HttpContext.Session.SetString("2FA_UserId", user.Id);
                     return RedirectToAction("VerifyTwoFactorAuth");
                 }
-
+                await LogAction(user.Id, "Login Success");
+                HttpContext.Session.Remove("PasswordExpired"); // ✅ Clear the flag after password reset
                 return RedirectToAction("Index", "Home");
             }
             else if (result.RequiresTwoFactor)
@@ -341,27 +357,29 @@ namespace EZYSoft2.Controllers
             }
             else if (result.IsLockedOut)
             {
+                await LogAction(user.Id, "Account Locked Out");
                 ModelState.AddModelError("", "This account is locked. Try again later.");
             }
             else
             {
                 int failedAttempts = await _userManager.GetAccessFailedCountAsync(user);
                 ModelState.AddModelError("", $"Invalid email or password. Attempts left: {3 - failedAttempts}");
-
                 _logger.LogWarning($"Failed login attempt {failedAttempts}/3 for {user.Email}");
+                await LogAction(user.Id, $"{failedAttempts} failed login attempt");
             }
 
             return View(model);
         }
 
-
+        [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Logout()
         {
-            var user = await _userManager.GetUserAsync(User);
+            var user = await _sessionHelper.GetValidatedUser(this);
             if (user != null)
             {
+                await LogAction(user.Id, "Logged Out");
                 _logger.LogInformation($"User {user.Email} logged out.");
 
                 // 🔹 Get the session token stored in cookies
@@ -398,80 +416,147 @@ namespace EZYSoft2.Controllers
                 return View(model);
             }
 
-            var user = await _userManager.GetUserAsync(User);
+            bool isExpiredPassword = HttpContext.Session.GetString("PasswordExpired") == "true";
+            var user = await _sessionHelper.GetValidatedUser(this);
+            bool isAuthenticated = user != null;
+
+            if (!isAuthenticated)
+            {
+                if (!isExpiredPassword)
+                {
+                    _logger.LogWarning($"🔴 SessionHelper failed to retrieve a valid user. Redirecting to Login.");
+                    return RedirectToAction("Login");
+                }
+
+                // 🔹 Retrieve Expired User from Session
+                string expiredUserEmail = HttpContext.Session.GetString("ExpiredUserEmail");
+                if (string.IsNullOrEmpty(expiredUserEmail))
+                {
+                    ModelState.AddModelError("", "Invalid request. Please log in again.");
+                    return RedirectToAction("Login");
+                }
+
+                user = await _userManager.FindByEmailAsync(expiredUserEmail);
+                if (user == null)
+                {
+                    ModelState.AddModelError("", "Invalid user.");
+                    return View(model);
+                }
+            }
+
+            if (isExpiredPassword)
+            {
+                _logger.LogInformation($"🔹 Expired password reset initiated for user {user.Email}");
+
+                // ✅ Prevent Password Reuse
+                var previousPasswords = JsonConvert.DeserializeObject<List<string>>(user.PreviousPasswords ?? "[]");
+                foreach (var oldPassword in previousPasswords)
+                {
+                    if (_userManager.PasswordHasher.VerifyHashedPassword(user, oldPassword, model.NewPassword) == PasswordVerificationResult.Success)
+                    {
+                        ModelState.AddModelError("NewPassword", "You cannot reuse your last 2 passwords.");
+                        await LogAction(user.Id, "Failed Change Password (Reused Password)");
+                        return View(model);
+                    }
+                }
+
+                // ✅ Reset Password
+                var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+                var resetResult = await _userManager.ResetPasswordAsync(user, token, model.NewPassword);
+
+                if (!resetResult.Succeeded)
+                {
+                    foreach (var error in resetResult.Errors)
+                    {
+                        ModelState.AddModelError("", error.Description);
+                    }
+                    await LogAction(user.Id, "Failed Change Password (Reset Error)");
+                    return View(model);
+                }
+
+                user.LastPasswordChange = DateTime.UtcNow;
+                previousPasswords.Insert(0, _userManager.PasswordHasher.HashPassword(user, model.NewPassword));
+                if (previousPasswords.Count > 2) previousPasswords.RemoveAt(2);
+                user.PreviousPasswords = JsonConvert.SerializeObject(previousPasswords);
+                await _userManager.UpdateAsync(user);
+
+                HttpContext.Session.Remove("PasswordExpired");
+                HttpContext.Session.Remove("ExpiredUserEmail");
+                await LogAction(user.Id, "Changed Password Successful for Expired Password");
+                _logger.LogInformation($"✅ Expired password successfully reset for user {user.Email}");
+                return RedirectToAction("Login");
+            }
+
+            // ✅ Normal Change Password Flow
+            if (user.LastPasswordChange != null && DateTime.UtcNow < user.LastPasswordChange.AddMinutes(5))
+            {
+                ModelState.AddModelError("NewPassword", "You cannot change your password so soon. Try again later.");
+                await LogAction(user.Id, "Failed Change Password (Too Soon)");
+                return View(model);
+            }
+
+            var prevPasswords = JsonConvert.DeserializeObject<List<string>>(user.PreviousPasswords ?? "[]");
+            foreach (var oldPassword in prevPasswords)
+            {
+                if (_userManager.PasswordHasher.VerifyHashedPassword(user, oldPassword, model.NewPassword) == PasswordVerificationResult.Success)
+                {
+                    ModelState.AddModelError("NewPassword", "You cannot reuse your last 2 passwords.");
+                    await LogAction(user.Id, "Failed Change Password (Reused Password)");
+                    return View(model);
+                }
+            }
+
+            var changeResult = await _userManager.ChangePasswordAsync(user, model.OldPassword, model.NewPassword);
+            if (!changeResult.Succeeded)
+            {
+                if (changeResult.Errors.Any(e => e.Code == "PasswordMismatch"))
+                {
+                    ModelState.AddModelError("OldPassword", "The old password you entered is incorrect.");
+                    await LogAction(user.Id, "Failed Change Password (Incorrect Old Password)");
+                }
+                else
+                {
+                    foreach (var error in changeResult.Errors)
+                    {
+                        ModelState.AddModelError("", error.Description);
+                    }
+                    await LogAction(user.Id, "Failed Change Password (General Error)");
+
+                }
+                return View(model);
+            }
+
+            user.LastPasswordChange = DateTime.UtcNow;
+            prevPasswords.Insert(0, _userManager.PasswordHasher.HashPassword(user, model.NewPassword));
+            if (prevPasswords.Count > 2) prevPasswords.RemoveAt(2);
+            user.PreviousPasswords = JsonConvert.SerializeObject(prevPasswords);
+            await _userManager.UpdateAsync(user);
+
+            await _signInManager.RefreshSignInAsync(user);
+            await LogAction(user.Id, "Changed Password");
+
+            _logger.LogInformation($"✅ Password successfully changed for user {user.Email}");
+
+            return RedirectToAction("Index", "Home");
+        }
+
+
+        [HttpGet]
+        public async Task<IActionResult> ChangePassword()
+        {
+            // 🔹 Check if the password expired flag is set
+            if (HttpContext.Session.GetString("PasswordExpired") == "true")
+            {
+                return View(); // ✅ Allow access only if redirected due to password expiration
+            }
+
+            // 🔹 Otherwise, enforce standard authentication
+            var user = await _sessionHelper.GetValidatedUser(this);
             if (user == null)
             {
                 return RedirectToAction("Login");
             }
 
-            // ✅ Enforce Minimum Password Age
-            if (user.LastPasswordChange != null && DateTime.UtcNow < user.LastPasswordChange.AddMinutes(5))
-            {
-                ModelState.AddModelError("NewPassword", "You cannot change your password so soon. Try again later.");
-                return View(model);
-            }
-
-            // ✅ Enforce Maximum Password Age
-            if (user.LastPasswordChange != null && DateTime.UtcNow > user.LastPasswordChange.AddDays(30))
-            {
-                ModelState.AddModelError("OldPassword", "Your password has expired. Please set a new password.");
-            }
-
-            // ✅ Retrieve and Deserialize Previous Passwords
-            var previousPasswords = JsonConvert.DeserializeObject<List<string>>(user.PreviousPasswords ?? "[]");
-
-            // ✅ Debugging Log (Check if previous passwords are correctly stored)
-            _logger.LogInformation($"User {user.Email} is attempting to change password. Stored previous passwords: {user.PreviousPasswords}");
-
-            // ✅ Verify that the new password is NOT the same as the last 2 passwords
-            foreach (var oldPassword in previousPasswords)
-            {
-                if (_userManager.PasswordHasher.VerifyHashedPassword(user, oldPassword, model.NewPassword) == PasswordVerificationResult.Success)
-                {
-                    ModelState.AddModelError("NewPassword", "You cannot reuse your last 2 passwords.");
-                    return View(model);
-                }
-            }
-
-            // ✅ Change Password
-            var result = await _userManager.ChangePasswordAsync(user, model.OldPassword, model.NewPassword);
-            if (!result.Succeeded)
-            {
-                // ✅ NEW: Check for incorrect old password and provide feedback
-                if (result.Errors.Any(e => e.Code == "PasswordMismatch"))
-                {
-                    ModelState.AddModelError("OldPassword", "The old password you entered is incorrect.");
-                }
-                else
-                {
-                    foreach (var error in result.Errors)
-                    {
-                        ModelState.AddModelError("", error.Description);
-                    }
-                }
-                return View(model);
-            }
-
-            // ✅ Update Last Password Change Timestamp
-            user.LastPasswordChange = DateTime.UtcNow;
-
-            // ✅ Store New Password in History (Keep Last 2 Passwords)
-            previousPasswords.Insert(0, _userManager.PasswordHasher.HashPassword(user, model.NewPassword));
-            if (previousPasswords.Count > 2) previousPasswords.RemoveAt(2); // Keep only last 2
-
-            user.PreviousPasswords = JsonConvert.SerializeObject(previousPasswords);
-            await _userManager.UpdateAsync(user);
-
-            await _signInManager.SignInAsync(user, isPersistent: false);
-            return RedirectToAction("Index", "Home");
-        }
-
-
-
-
-        [HttpGet]
-        public IActionResult ChangePassword()
-        {
             return View();
         }
 
@@ -489,6 +574,7 @@ namespace EZYSoft2.Controllers
             {
                 return View(model);
             }
+            await LogAction(model.Email, "Forgot Password Requested");
 
             var user = await _userManager.FindByEmailAsync(model.Email);
             if (user == null)
@@ -531,6 +617,7 @@ namespace EZYSoft2.Controllers
 
             return View(new ResetPasswordViewModel { Token = token, Email = email });
         }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ResetPassword(ResetPasswordViewModel model)
@@ -548,13 +635,27 @@ namespace EZYSoft2.Controllers
                 return RedirectToAction("Login"); // Do NOT reveal user existence
             }
 
+            // 🔹 Attempt to reset the password with the token
             var result = await _userManager.ResetPasswordAsync(user, model.Token, model.NewPassword);
+
             if (result.Succeeded)
             {
+                await LogAction(user.Id, "Reset Password Success");
                 _logger.LogInformation($"✅ Password reset successful for {user.Email}");
                 return RedirectToAction("Login");
             }
 
+            // 🔹 Detect if token is invalid or expired
+            bool isTokenExpired = result.Errors.Any(e => e.Code == "InvalidToken");
+            if (isTokenExpired)
+            {
+                await LogAction(user.Id, "Password Reset Failed: Expired Token");
+                _logger.LogWarning("🚨 Reset password failed: Token expired or invalid.");
+                ModelState.AddModelError("", "The password reset link has expired or is invalid. Please request a new one.");
+                return View(model);
+            }
+
+            // 🔹 Handle other errors (e.g., password policy violations)
             foreach (var error in result.Errors)
             {
                 ModelState.AddModelError("", error.Description);
@@ -563,10 +664,13 @@ namespace EZYSoft2.Controllers
 
             return View(model);
         }
+
+
+        [Authorize]
         [HttpGet]
         public async Task<IActionResult> EnableTwoFactorAuth()
         {
-            var user = await _userManager.GetUserAsync(User);
+        var user = await _sessionHelper.GetValidatedUser(this);
             if (user == null) return NotFound("User not found.");
 
             var key = await _userManager.GetAuthenticatorKeyAsync(user);
@@ -575,7 +679,7 @@ namespace EZYSoft2.Controllers
                 await _userManager.ResetAuthenticatorKeyAsync(user);
                 key = await _userManager.GetAuthenticatorKeyAsync(user);
             }
-
+            await LogAction(user.Id, "Enabled 2FA");
             string authenticatorUri = GenerateQrCodeUrl(user.Email, key);
             Console.WriteLine($"Generated QR Code URL: {authenticatorUri}");
             user.TwoFactorEnabled = true;
@@ -590,24 +694,27 @@ namespace EZYSoft2.Controllers
         }
 
 
+        [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DisableTwoFactorAuth()
         {
-            var user = await _userManager.GetUserAsync(User);
+        var user = await _sessionHelper.GetValidatedUser(this);
             if (user == null)
             {
                 return RedirectToAction("Login");
             }
-
+            await LogAction(user.Id, "Disabled 2FA");
             await _userManager.SetTwoFactorEnabledAsync(user, false);
             return RedirectToAction("Manage", "Account");
         }
+
+        [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ConfirmEnableTwoFactorAuth(string code)
         {
-            var user = await _userManager.GetUserAsync(User);
+        var user = await _sessionHelper.GetValidatedUser(this);
             if (user == null)
             {
                 return RedirectToAction("Login");
@@ -656,23 +763,44 @@ namespace EZYSoft2.Controllers
 
             if (result.Succeeded)
             {
-                HttpContext.Session.Remove("2FA_UserId"); // ✅ Clear session after successful login
+                HttpContext.Session.Remove("2FA_UserId");
+
+                // 🔹 Generate new session token on 2FA success
+                string newSessionToken = Guid.NewGuid().ToString();
+                user.SessionToken = newSessionToken;
+                await _userManager.UpdateAsync(user);
+
+                Response.Cookies.Append("SessionToken", newSessionToken, new CookieOptions
+                {
+                    HttpOnly = true,
+                    Secure = true,
+                    Expires = DateTime.UtcNow.AddMinutes(30)
+                });
+                await LogAction(user.Id, "Successful 2FA Attempt");
+
+                _logger.LogInformation($"✅ 2FA successful for {user.Email}, session token updated.");
+
                 return RedirectToAction("Index", "Home");
             }
             else
             {
+                await LogAction(user.Id, "Failed 2FA Attempt");
+
                 ModelState.AddModelError(string.Empty, "Invalid authentication code. Please try again.");
                 return View();
             }
         }
+
+        [Authorize]
         [HttpGet]
         public async Task<IActionResult> Manage()
         {
-            var user = await _userManager.GetUserAsync(User);
+        var user = await _sessionHelper.GetValidatedUser(this);
             if (user == null)
             {
                 return RedirectToAction("Login");
             }
+            await LogAction(user.Id, "Accessed Manage Page");
 
             ViewBag.TwoFactorEnabled = await _userManager.GetTwoFactorEnabledAsync(user);
             return View();

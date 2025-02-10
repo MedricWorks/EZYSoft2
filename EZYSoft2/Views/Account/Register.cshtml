@@ -9,16 +9,20 @@
     @Html.AntiForgeryToken()
     <input type="hidden" id="g-recaptcha-response" name="RecaptchaToken">
 
+    <!-- 🔹 First Name (Live Validation: Letters Only) -->
     <div class="form-group">
         <label asp-for="FirstName"></label>
-        <input asp-for="FirstName" class="form-control" />
-        <span asp-validation-for="FirstName" class="text-danger"></span>    
+        <input asp-for="FirstName" class="form-control" id="FirstName" required />
+        <span asp-validation-for="FirstName" class="text-danger"></span>
+        <small id="firstNameError" class="text-danger"></small> <!-- 🔹 Dynamic Validation -->
     </div>
 
+    <!-- 🔹 Last Name (Live Validation: Letters Only) -->
     <div class="form-group">
         <label asp-for="LastName"></label>
-        <input asp-for="LastName" class="form-control" />
+        <input asp-for="LastName" class="form-control" id="LastName" required />
         <span asp-validation-for="LastName" class="text-danger"></span>
+        <small id="lastNameError" class="text-danger"></small> <!-- 🔹 Dynamic Validation -->
     </div>
 
     <div class="form-group">
@@ -28,12 +32,15 @@
         <small id="emailError" class="text-danger"></small> <!-- 🔹 Dynamic JS Validation -->
     </div>
 
+    <!-- 🔹 Date of Birth with Live Validation -->
     <div class="form-group">
         <label asp-for="DateOfBirth"></label>
-        <input asp-for="DateOfBirth" type="date" class="form-control" required />
+        <input asp-for="DateOfBirth" type="date" class="form-control" required id="DateOfBirth" />
         <span asp-validation-for="DateOfBirth" class="text-danger"></span>
+        <small id="dobError" class="text-danger"></small> <!-- 🔹 Dynamic Validation -->
     </div>
 
+    <!-- 🔹 Password Strength Meter -->
     <div class="form-group">
         <label for="Password">Password</label>
         <div class="input-group">
@@ -53,6 +60,7 @@
             margin-top: 5px;
             border-radius: 5px;
         }
+
         #strengthBar {
             height: 100%;
             width: 0%;
@@ -66,11 +74,12 @@
         <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
     </div>
 
-    <!-- New NRIC Field -->
+    <!-- 🔹 NRIC with Live Validation -->
     <div class="form-group">
         <label asp-for="NRIC"></label>
-        <input asp-for="NRIC" class="form-control" />
+        <input asp-for="NRIC" class="form-control" id="NRIC" required />
         <span asp-validation-for="NRIC" class="text-danger"></span>
+        <small id="nricError" class="text-danger"></small> <!-- 🔹 Dynamic Validation -->
     </div>
 
     <!-- New Gender Dropdown -->
@@ -91,12 +100,14 @@
         <textarea asp-for="WhoAmI" class="form-control"></textarea>
         <span asp-validation-for="WhoAmI" class="text-danger"></span>
     </div>
+
     <div class="form-group">
         <label asp-for="Resume"></label>
         <input asp-for="Resume" type="file" class="form-control" />
         <span asp-validation-for="Resume" class="text-danger"></span>
         <small id="resumeError" class="text-danger"></small> <!-- 🔹 Dynamic Resume Error -->
     </div>
+
     <button type="submit" class="btn btn-primary">Register</button>
 </form>
 @await Component.InvokeAsync("ReCaptcha")

@@ -1,5 +1,6 @@
 ﻿using EZYSoft2.Helpers;
 using EZYSoft2.Models;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -24,7 +25,6 @@ namespace EZYSoft2.Controllers
         public async Task<IActionResult> Index()
         {
             var user = await _userManager.GetUserAsync(User);
-
             if (user != null)
             {
                 _logger.LogInformation($"User {user.Email} accessed the home page.");
@@ -33,13 +33,31 @@ namespace EZYSoft2.Controllers
                 Request.Cookies.TryGetValue("SessionToken", out string storedSessionToken);
 
                 // ✅ Ensure session token is still valid (DO NOT create a new one automatically)
-                if (string.IsNullOrEmpty(user.SessionToken) || user.SessionToken != storedSessionToken)
+                if (string.IsNullOrEmpty(user.SessionToken))
                 {
-                    _logger.LogWarning($"Session token issue detected for {user.Email}. User must log in again.");
+                    _logger.LogWarning($"❌ Session token missing for {user.Email}. Logging out.");
                     await _signInManager.SignOutAsync();
                     Response.Cookies.Delete("SessionToken");
                     return RedirectToAction("Login", "Account");
                 }
+                else if (user.SessionToken != storedSessionToken)
+                {
+                    _logger.LogWarning($"Session token mismatch detected for {user.Email}. Checking recent login.");
+
+                    // ✅ Allow login if the user recently completed 2FA (Token just got updated)
+                    if (HttpContext.Session.GetString("2FA_UserId") == user.Id)
+                    {
+                        _logger.LogInformation($"✅ Allowing session for {user.Email} as they just completed 2FA.");
+                        HttpContext.Session.Remove("2FA_UserId"); // Clear flag
+                    }
+                    else
+                    {
+                        await _signInManager.SignOutAsync();
+                        Response.Cookies.Delete("SessionToken");
+                        return RedirectToAction("Login", "Account");
+                    }
+                }
+
 
                 // 🔹 Decrypt NRIC before sending to the view
                 if (!string.IsNullOrEmpty(user.NRIC))
@@ -64,36 +82,31 @@ namespace EZYSoft2.Controllers
 
             return View(user);
         }
-    
-        [HttpPost]
-        public async Task<IActionResult> Logout()
-        {
-            var user = await _userManager.GetUserAsync(User);
-            if (user != null)
-            {
-                _logger.LogInformation($"User {user.Email} logged out.");
-                user.SessionToken = null;
-                await _userManager.UpdateAsync(user);
-            }
-
-            await _signInManager.SignOutAsync();
-            Response.Cookies.Delete("SessionToken");
-
-            return RedirectToAction("Login", "Account");
-        }
 
         [Route("Home/Error")]
         public IActionResult Error(int? statusCode = null)
         {
+            var exceptionFeature = HttpContext.Features.Get<IExceptionHandlerFeature>();
+
             if (statusCode.HasValue)
             {
-                _logger.LogWarning($"⚠️ Error {statusCode}: {Request.Path}");
+                _logger.LogWarning($"⚠ Error {statusCode}: {Request.Path}");
                 ViewData["StatusCode"] = statusCode;
-                ViewData["Path"] = Request.Path;
+                ViewData["ErrorMessage"] = $"An error occurred (Status Code: {statusCode}).";
+            }
+            else if (exceptionFeature != null)
+            {
+                _logger.LogError($"🚨 Unhandled Exception: {exceptionFeature.Error.Message}");
+
+                ViewData["StatusCode"] = 500; // Internal Server Error
+                ViewData["ErrorMessage"] = "An unexpected error occurred.";
+                ViewData["ErrorDetails"] = "Please contact support if the issue persists.";
             }
             else
             {
-                _logger.LogError("🚨 An unexpected error occurred.");
+                _logger.LogError("🚨 Unknown error encountered.");
+                ViewData["StatusCode"] = "Unknown";
+                ViewData["ErrorMessage"] = "An unknown error occurred.";
             }
 
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });

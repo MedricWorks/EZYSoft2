@@ -1,5 +1,6 @@
 ﻿using EZYSoft2.Data;
 using EZYSoft2.Models;
+using EZYSoft2.Helpers;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -29,7 +30,10 @@ builder.Services.AddIdentity<User, IdentityRole>(options =>
 })
 .AddEntityFrameworkStores<ApplicationDbContext>()
 .AddDefaultTokenProviders();
-
+builder.Services.Configure<DataProtectionTokenProviderOptions>(options =>
+{
+    options.TokenLifespan = TimeSpan.FromHours(1); // ⏳ Token expires in 1 hour
+});
 // Configure Authentication Cookies
 builder.Services.ConfigureApplicationCookie(options =>
 {
@@ -54,6 +58,8 @@ builder.Services.Configure<ReCaptchaSettings>(builder.Configuration.GetSection("
 builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
 builder.Services.AddSingleton<IEmailSender, EmailSender>();
 builder.Services.AddControllersWithViews();
+builder.Services.AddHttpContextAccessor(); // Required for accessing cookies
+builder.Services.AddScoped<SessionHelper>(); // Register the helper
 
 var app = builder.Build();
 

@@ -6,28 +6,36 @@
 <div class="container text-center mt-5">
     <h1 class="text-danger font-weight-bold">Error</h1>
 
+    <h2 class="text-danger font-weight-bold">
+        @ViewData["ErrorMessage"]
+    </h2>
+
     @if (ViewData["StatusCode"] != null)
     {
-        <h2 class="text-danger font-weight-bold">Status Code: @ViewData["StatusCode"]</h2>
-    }
-
-    @if (ViewData["ErrorMessage"] != null)
-    {
-        <h2 class="text-danger font-weight-bold">@ViewData["ErrorMessage"]</h2>
-    }
-    else
-    {
-        <h2 class="text-danger font-weight-bold">An unexpected error occurred.</h2>
+        <h3 class="text-muted">Status Code: @ViewData["StatusCode"]</h3>
     }
 
     @if (Model.ShowRequestId)
     {
-        <p>
-            <strong>Request ID:</strong> <code>@Model.RequestId</code>
-        </p>
+        <p><strong>Request ID:</strong> <code>@Model.RequestId</code></p>
+    }
+
+    @if (ViewData["ErrorDetails"] != null && Context.RequestServices.GetRequiredService<IWebHostEnvironment>().IsDevelopment())
+    {
+        <div class="alert alert-warning">
+            <strong>Debug Info:</strong>
+            <pre>@ViewData["ErrorDetails"]</pre>
+        </div>
     }
 
     <p>
         <a href="@Url.Action("Index", "Home")" class="btn btn-primary mt-3">Return to Home</a>
+        <button class="btn btn-secondary mt-3" onclick="goBack()">Go Back</button>
     </p>
 </div>
+
+<script>
+    function goBack() {
+        window.history.back();
+    }
+</script>

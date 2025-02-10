@@ -1,10 +1,18 @@
 ﻿document.addEventListener("DOMContentLoaded", function () {
     console.log("✅ DOM Loaded - Script is running!");  // Debugging Log
 
-    const form = document.getElementById("registerForm");
-    if (!form) return; // ✅ Exit if form does not exist (prevents errors on non-registration pages)
+    const registerForm = document.getElementById("registerForm");
+    const changePasswordForm = document.getElementById("changePasswordForm");
+    const resetPasswordForm = document.getElementById("resetPasswordForm");
 
-    const passwordInput = document.getElementById("Password");
+    const form = registerForm || changePasswordForm || resetPasswordForm; // ✅ Detects which form is present
+
+    if (!form) {
+        console.warn("⚠️ No relevant form found. Exiting script.");
+        return; // ✅ Prevents execution on unrelated pages
+    }
+
+    const passwordInput = document.getElementById("Password") || document.getElementById("NewPassword");
     const confirmPasswordInput = document.getElementById("ConfirmPassword");
     const strengthBar = document.getElementById("strengthBar");
     const passwordRequirementsText = document.getElementById("passwordRequirementsText");
@@ -12,6 +20,14 @@
     const emailError = document.getElementById("emailError");
     const resumeInput = document.getElementById("Resume");
     const resumeError = document.getElementById("resumeError");
+    const nricInput = document.getElementById("NRIC");
+    const nricError = document.getElementById("nricError");
+    const dobInput = document.getElementById("DateOfBirth");
+    const dobError = document.getElementById("dobError");
+    const firstNameInput = document.getElementById("FirstName");
+    const firstNameError = document.getElementById("firstNameError");
+    const lastNameInput = document.getElementById("LastName");
+    const lastNameError = document.getElementById("lastNameError");
 
     const siteKey = document.getElementById("g-recaptcha-response") ? form.getAttribute("data-recaptcha-sitekey") : null;
     if (!siteKey) {
@@ -23,10 +39,47 @@
         emailInput.addEventListener("input", function () {
             let email = emailInput.value;
             let emailPattern = /^[a-zA-Z0-9@.]+$/;
-            emailError.textContent = emailPattern.test(email) ? "" : "Email can only contain letters, numbers, and '@'.";
+            emailError.textContent = emailPattern.test(email) ? "" : "Email can only contain letters, numbers, and '@' symbols.";
         });
     }
 
+    if (firstNameInput && firstNameError) {
+        firstNameInput.addEventListener("input", function () {
+            let isValid = /^[A-Za-z]+$/.test(firstNameInput.value);
+            firstNameError.textContent = isValid ? "" : "First Name must only contain letters.";
+        });
+    }
+
+    // ✅ Live Last Name Validation (Only Letters)
+    if (lastNameInput && lastNameError) {
+        lastNameInput.addEventListener("input", function () {
+            let isValid = /^[A-Za-z]+$/.test(lastNameInput.value);
+            lastNameError.textContent = isValid ? "" : "Last Name must only contain letters.";
+        });
+    }
+    // ✅ Live NRIC Validation (Only Letters & Numbers)
+    if (nricInput && nricError) {
+        nricInput.addEventListener("input", function () {
+            let nricValue = nricInput.value;
+            let isValid = /^[a-zA-Z0-9]+$/.test(nricValue);
+            nricError.textContent = isValid ? "" : "NRIC must only contain letters and numbers.";
+        });
+    }
+
+    // ✅ Live Date of Birth Validation (Cannot be today or in the future)
+    if (dobInput && dobError) {
+        dobInput.addEventListener("input", function () {
+            let dob = new Date(dobInput.value);
+            let today = new Date();
+            today.setHours(0, 0, 0, 0); // Remove time for accurate comparison
+
+            if (dob >= today) {
+                dobError.textContent = "Date of Birth cannot be today or in the future.";
+            } else {
+                dobError.textContent = "";
+            }
+        });
+    }
     // ✅ Password Strength Meter + Missing Requirements Tracking
     if (passwordInput && strengthBar && passwordRequirementsText) {
         passwordInput.addEventListener("input", function () {
@@ -73,9 +126,9 @@
 
     // ✅ Prevent Form Submission If Errors Exist
     form.addEventListener("submit", function (event) {
-        let emailErrorText = emailError.textContent.trim();
+        let emailErrorText = emailError ? emailError.textContent.trim() : "";
         let passwordWeak = passwordRequirementsText.classList.contains("text-danger");
-        let resumeErrorText = resumeError.textContent.trim();
+        let resumeErrorText = resumeError ? resumeError.textContent.trim() : "";
 
         let hasErrors = emailErrorText !== "" || passwordWeak || resumeErrorText !== "";
 
