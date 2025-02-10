@@ -1,0 +1,9 @@
+﻿@model EZYSoft2.Models.EnableTwoFactorAuthViewModel
+
+<h2>Enable Two-Factor Authentication</h2>
+
+<p>Scan this QR code with your authenticator app:</p>
+
+<img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=@Uri.EscapeDataString(Model.AuthenticatorUri)" alt="Scan this QR Code" />
+
+<p>Or manually enter this key: <strong>@Model.SharedKey</strong></p>

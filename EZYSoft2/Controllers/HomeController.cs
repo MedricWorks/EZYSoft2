@@ -3,6 +3,7 @@ using EZYSoft2.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using System.Diagnostics;
 using System.Threading.Tasks;
 
 namespace EZYSoft2.Controllers
@@ -28,21 +29,15 @@ namespace EZYSoft2.Controllers
             {
                 _logger.LogInformation($"User {user.Email} accessed the home page.");
 
-                // 🔹 Retrieve session token from cookies
-                if (Request.Cookies.TryGetValue("SessionToken", out string storedSessionToken))
+                // 🔹 Get stored session token from the browser cookies
+                Request.Cookies.TryGetValue("SessionToken", out string storedSessionToken);
+
+                // ✅ Ensure session token is still valid (DO NOT create a new one automatically)
+                if (string.IsNullOrEmpty(user.SessionToken) || user.SessionToken != storedSessionToken)
                 {
-                    if (user.SessionToken != storedSessionToken)
-                    {
-                        _logger.LogWarning($"Session token mismatch for user {user.Email}. Logging out.");
-                        await _signInManager.SignOutAsync();
-                        Response.Cookies.Delete("SessionToken");
-                        return RedirectToAction("Login", "Account");
-                    }
-                }
-                else
-                {
-                    _logger.LogWarning($"No session token found for user {user.Email}. Logging out.");
+                    _logger.LogWarning($"Session token issue detected for {user.Email}. User must log in again.");
                     await _signInManager.SignOutAsync();
+                    Response.Cookies.Delete("SessionToken");
                     return RedirectToAction("Login", "Account");
                 }
 
@@ -64,11 +59,12 @@ namespace EZYSoft2.Controllers
             else
             {
                 _logger.LogWarning("Anonymous user attempted to access the home page.");
+                return RedirectToAction("Login", "Account");
             }
 
             return View(user);
         }
-
+    
         [HttpPost]
         public async Task<IActionResult> Logout()
         {
@@ -85,5 +81,23 @@ namespace EZYSoft2.Controllers
 
             return RedirectToAction("Login", "Account");
         }
+
+        [Route("Home/Error")]
+        public IActionResult Error(int? statusCode = null)
+        {
+            if (statusCode.HasValue)
+            {
+                _logger.LogWarning($"⚠️ Error {statusCode}: {Request.Path}");
+                ViewData["StatusCode"] = statusCode;
+                ViewData["Path"] = Request.Path;
+            }
+            else
+            {
+                _logger.LogError("🚨 An unexpected error occurred.");
+            }
+
+            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+
     }
 }

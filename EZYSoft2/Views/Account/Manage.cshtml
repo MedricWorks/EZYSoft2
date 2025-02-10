@@ -1,0 +1,16 @@
+﻿<h2>Two-Factor Authentication</h2>
+<p>For better security, enable Two-Factor Authentication (2FA) for your account.</p>
+
+@if (ViewBag.TwoFactorEnabled)
+{
+    <p>✅ 2FA is currently enabled.</p>
+    <form asp-action="DisableTwoFactorAuth" method="post">
+        <button type="submit" class="btn btn-danger">Disable 2FA</button>
+    </form>
+}
+else
+{
+    <p>❌ 2FA is currently disabled.</p>
+    <a asp-action="EnableTwoFactorAuth" class="btn btn-primary">Enable 2FA</a>
+}
+    

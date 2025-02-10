@@ -1,10 +1,12 @@
 ﻿@model EZYSoft2.Models.RegisterViewModel
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+    <script src="~/js/site.js"></script>
 }
 <h2>Register</h2>
 
-<form asp-action="Register" method="post" enctype="multipart/form-data">
+<form asp-action="Register" method="post" enctype="multipart/form-data" id="registerForm">
+    @Html.AntiForgeryToken()
     <input type="hidden" id="g-recaptcha-response" name="RecaptchaToken">
 
     <div class="form-group">
@@ -23,6 +25,13 @@
         <label asp-for="Email"></label>
         <input asp-for="Email" class="form-control" />
         <span asp-validation-for="Email" class="text-danger"></span>
+        <small id="emailError" class="text-danger"></small> <!-- 🔹 Dynamic JS Validation -->
+    </div>
+
+    <div class="form-group">
+        <label asp-for="DateOfBirth"></label>
+        <input asp-for="DateOfBirth" type="date" class="form-control" required />
+        <span asp-validation-for="DateOfBirth" class="text-danger"></span>
     </div>
 
     <div class="form-group">
@@ -53,10 +62,8 @@
 
     <div class="form-group">
         <label asp-for="ConfirmPassword"></label>
-        <div class="input-group">
-            <input asp-for="ConfirmPassword" type="password" class="form-control" />
-             <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
-        </div>
+        <input asp-for="ConfirmPassword" type="password" class="form-control" />
+        <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
     </div>
 
     <!-- New NRIC Field -->
@@ -88,6 +95,7 @@
         <label asp-for="Resume"></label>
         <input asp-for="Resume" type="file" class="form-control" />
         <span asp-validation-for="Resume" class="text-danger"></span>
+        <small id="resumeError" class="text-danger"></small> <!-- 🔹 Dynamic Resume Error -->
     </div>
     <button type="submit" class="btn btn-primary">Register</button>
 </form>

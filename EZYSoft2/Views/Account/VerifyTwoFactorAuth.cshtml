@@ -1,0 +1,21 @@
+﻿@model EZYSoft2.Models.TwoFactorAuthViewModel
+
+<h2>Two-Factor Authentication</h2>
+
+<form asp-action="VerifyTwoFactorAuth" method="post">
+    @Html.AntiForgeryToken()
+
+    <div class="form-group">
+        <label>Enter the 6-digit code from your authenticator app:</label>
+        <input type="text" name="code" class="form-control" required />
+
+        @if (!ViewData.ModelState.IsValid)
+        {
+            <div class="text-danger">
+                @Html.ValidationSummary(true)
+            </div>
+        }
+
+        <button type="submit" class="btn btn-primary">Verify</button>
+    </div>
+</form>

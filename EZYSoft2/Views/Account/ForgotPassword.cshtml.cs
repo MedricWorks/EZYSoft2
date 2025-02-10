@@ -1,9 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace EZYSoft2.Views.Shared.Components.ReCaptcha
+namespace EZYSoft2.Views.Account
 {
-    public class DefaultModel : PageModel
+    public class ForgotPasswordModel : PageModel
     {
         public void OnGet()
         {

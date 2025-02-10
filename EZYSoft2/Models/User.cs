@@ -12,6 +12,7 @@ namespace EZYSoft2.Models
         public string ResumePath { get; set; }
         public string WhoAmI { get; set; }
         public string? SessionToken { get; set; }
-
+        public string PreviousPasswords { get; set; } = "[]"; // Stores JSON array of last 2 password hashes
+        public DateTime LastPasswordChange { get; set; } = DateTime.UtcNow;
     }
 }

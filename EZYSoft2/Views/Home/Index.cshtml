@@ -1,13 +1,16 @@
-﻿@model EZYSoft2.Models.User
+﻿@using System.Net
+@model EZYSoft2.Models.User
 
 @if (Model != null)
 {
-    <h2>Welcome, @Model.FirstName @Model.LastName</h2>
-    <p><strong>Email:</strong> @Model.Email</p>
-    <p><strong>Gender:</strong> @Model.Gender</p>
+    <h2>
+        Welcome, @WebUtility.HtmlEncode(Model.FirstName) @WebUtility.HtmlEncode(Model.LastName)
+    </h2>
+    <p><strong>Email:</strong> @WebUtility.HtmlEncode(Model.Email)</p>
+    <p><strong>Gender:</strong> @WebUtility.HtmlEncode(Model.Gender)</p>
     <p><strong>Date of Birth:</strong> @Model.DateOfBirth.ToShortDateString()</p>
-    <p><strong>NRIC:</strong> @Model.NRIC</p> <!-- Decrypted NRIC -->
-    <p><strong>Who Am I:</strong> @Model.WhoAmI</p>
+    <p><strong>NRIC:</strong> @WebUtility.HtmlEncode(Model.NRIC)</p> <!-- Decrypted & encoded NRIC -->
+    <p><strong>Who Am I:</strong> @WebUtility.HtmlEncode(Model.WhoAmI)</p>
 
     @if (!string.IsNullOrEmpty(Model.ResumePath))
     {
