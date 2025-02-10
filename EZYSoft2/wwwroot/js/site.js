@@ -135,7 +135,6 @@
         console.log("📧 Email Error:", emailErrorText ? emailErrorText : "✅ No error");
         console.log("🔐 Password Weak?", passwordWeak ? "⚠️ Yes" : "✅ No");
         console.log("📄 Resume Error:", resumeErrorText ? resumeErrorText : "✅ No error");
-        console.log("⚠️ hasErrors:", hasErrors);
 
         if (hasErrors) {
             event.preventDefault(); // Stop form submission if errors exist

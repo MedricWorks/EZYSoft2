@@ -72,7 +72,6 @@ namespace EZYSoft2.Controllers
 
             _dbContext.AuditLogs.Add(log);
             await _dbContext.SaveChangesAsync();
-            _logger.LogInformation($"📝 Audit Log: {action} by {userId}");
         }
 
         [HttpGet]
@@ -112,7 +111,6 @@ namespace EZYSoft2.Controllers
                 if (model.DateOfBirth >= DateTime.UtcNow.Date)
                 {
                     ModelState.AddModelError(nameof(model.DateOfBirth), "Date of Birth cannot be today or in the future.");
-                    _logger.LogWarning($"🚨 Registration failed: User {model.Email} entered an invalid Date of Birth ({model.DateOfBirth}).");
                     return View(model);
                 }
                 // 🔹 Sanitize input before saving
@@ -131,7 +129,6 @@ namespace EZYSoft2.Controllers
                 if (!System.Text.RegularExpressions.Regex.IsMatch(model.NRIC, @"^[a-zA-Z0-9]+$"))
                 {
                     ModelState.AddModelError(nameof(model.NRIC), "NRIC must only contain letters and numbers.");
-                    _logger.LogWarning($"🚨 Registration failed: User {model.Email} entered an invalid NRIC ({model.NRIC}).");
                     return View(model);
                 }
 
@@ -148,7 +145,6 @@ namespace EZYSoft2.Controllers
                 if (!System.Text.RegularExpressions.Regex.IsMatch(model.Email, @"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"))
                 {
                     ModelState.AddModelError(nameof(model.Email), "Invalid email format. Please enter a valid email.");
-                    _logger.LogWarning($"Registration failed: Invalid email format {model.Email}.");
                     return View(model);
                 }
 
@@ -157,7 +153,6 @@ namespace EZYSoft2.Controllers
                 if (existingUser != null)
                 {
                     ModelState.AddModelError(nameof(model.Email), "This email is already registered.");
-                    _logger.LogWarning($"Registration failed: Email {model.Email} is already registered.");
                     return View(model);
                 }
 
@@ -200,7 +195,6 @@ namespace EZYSoft2.Controllers
 
                     await _signInManager.SignInAsync(user, isPersistent: false);
                     await LogAction(user.Id, "User Registered");
-                    _logger.LogInformation($"User {user.Email} successfully registered.");
                     return RedirectToAction("Index", "Home");
                 }
 

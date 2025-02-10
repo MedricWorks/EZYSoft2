@@ -90,7 +90,6 @@ namespace EZYSoft2.Controllers
 
             if (statusCode.HasValue)
             {
-                _logger.LogWarning($"⚠ Error {statusCode}: {Request.Path}");
                 ViewData["StatusCode"] = statusCode;
                 ViewData["ErrorMessage"] = $"An error occurred (Status Code: {statusCode}).";
             }
