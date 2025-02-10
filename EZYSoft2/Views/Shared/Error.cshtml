@@ -7,7 +7,7 @@
     <h1 class="text-danger font-weight-bold">Error</h1>
 
     <h2 class="text-danger font-weight-bold">
-        @ViewData["ErrorMessage"]
+        @TempData["ErrorMessage"]
     </h2>
 
     @if (ViewData["StatusCode"] != null)

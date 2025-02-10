@@ -646,7 +646,8 @@ namespace EZYSoft2.Controllers
                 await LogAction(user.Id, "Password Reset Failed: Expired Token");
                 _logger.LogWarning("🚨 Reset password failed: Token expired or invalid.");
                 ModelState.AddModelError("", "The password reset link has expired or is invalid. Please request a new one.");
-                return View(model);
+                TempData["ErrorMessage"] = "Invalid or expired password reset token.";
+                return RedirectToAction("Error", "Home", new { statusCode = 400 });
             }
 
             // 🔹 Handle other errors (e.g., password policy violations)
